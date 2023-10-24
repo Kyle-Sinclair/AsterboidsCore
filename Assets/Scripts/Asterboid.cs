@@ -20,7 +20,6 @@ public class Asterboid : MonoBehaviour
         var diff = transform.position - target.transform.position;
         var diffLen = diff.magnitude;
         var scaler = Mathf.Clamp01(1.0f - diffLen / controller.neighborDist);
-      //  Debug.Log(diff * (scaler / diffLen));
 
         return diff * (scaler / diffLen);
     }
@@ -34,14 +33,14 @@ public class Asterboid : MonoBehaviour
             animator.speed = Random.Range(-1.0f, 1.0f) * animationSpeedVariation + 1.0f;
     }
 
-    void Update()
+    public void GameUpdate()
     {
         var currentPosition = transform.position;
         var currentRotation = transform.rotation;
 
-        // Current velocity randomized with noise.
+        // Current ControllerVelocity randomized with noise.
         var noise = Mathf.PerlinNoise(Time.time, noiseOffset) * 2.0f - 1.0f;
-        var velocity = controller.velocity * (1.0f + noise * controller.velocityVariation);
+        var velocity = controller.ControllerVelocity * (1.0f + noise * controller.ControllerVelocityVariation);
 
         // Initializes the vectors.
         var separation = Vector3.zero;
@@ -50,7 +49,6 @@ public class Asterboid : MonoBehaviour
 
         // Looks up nearby boids.
         var nearbyBoids = Physics.OverlapSphere(currentPosition, controller.neighborDist, 1 << 6);
-        Debug.Log(nearbyBoids.Length);
 
         // Accumulates the vectors.
         foreach (var boid in nearbyBoids)
@@ -58,7 +56,6 @@ public class Asterboid : MonoBehaviour
             if (boid.gameObject == gameObject) continue;
             var t = boid.transform;
             separation += GetSeparationVector(t);
-            Debug.Log(separation);
 
             alignment += t.forward;
             cohesion += t.position;

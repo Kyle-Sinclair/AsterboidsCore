@@ -435,7 +435,12 @@ PrefabInstance:
     - target: {fileID: 4753357073809493875, guid: 3bf792836eba6264ca278316fc0c0d97,
         type: 3}
       propertyPath: spawnCount
-      value: 100
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753357073809493875, guid: 3bf792836eba6264ca278316fc0c0d97,
+        type: 3}
+      propertyPath: neighborDist
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
         type: 3}
