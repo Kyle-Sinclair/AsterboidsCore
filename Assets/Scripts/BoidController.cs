@@ -6,10 +6,13 @@ using UnityEngine;
 
 using UnityEngine;
 using System.Collections;
+using Jobs;
+using TreeEditor;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine.Jobs;
 using Random = UnityEngine.Random;
 
@@ -34,10 +37,14 @@ public class BoidController : MonoBehaviour {
 
     [Header("Optimised Boid Implementation")]
     public TransformAccessArray m_AsterboidAccessArray;
-
     public NativeArray<Vector3> AsterboidPositions;
-    public NativeArray<Vector3> AsterboidForwards;
-    public NativeArray<Vector3> AsterboidDirections;
+    public NativeArray<Vector3> testVectors;
+    public NativeArray<Quaternion> AsterboidRotations;
+    public NativeArray<Vector3> AsterboidVectorRotations;
+    
+    public float BoidSpeed = 5f;
+
+    public NativeArray<Vector3> AsterboidVelocities;
     public float3 ControllerPosition;
     public Transform[] AsterboidsReferences;
 
@@ -48,26 +55,40 @@ public class BoidController : MonoBehaviour {
 
     private void Update() {
         ControllerPosition = transform.position;
+        
         for (var i = 0; i < spawnCount; i++) {
             AsterboidPositions[i] = AsterboidsReferences[i].transform.position;
-            AsterboidForwards[i] = AsterboidsReferences[i].transform.forward;
+            //AsterboidVelocities[i] = AsterboidsReferences[i].transform.forward;
         }
-
-        BoidDirectionJob CalculateAllBoidDirections = CreateBoidDirectionJob();
-        JobHandle BoidDirectionJob = CalculateAllBoidDirections.Schedule();
-        BoidDirectionJob.Complete();
+        float delta = Time.deltaTime;
+       
+        BoidDirectionJob directionJob = CreateBoidDirectionJob(delta);
+        JobHandle directionJobHandle = directionJob.Schedule();
         
-        var job = new VelocityJob()
-        {
-            deltaTime = Time.deltaTime,
-            velocity = AsterboidDirections
-        };
-        JobHandle jobHandle = job.Schedule(m_AsterboidAccessArray);
+        MoveAsteroidsJob moveAsteroidsJob = CreateMoveAsteroidJob(delta);
+        JobHandle moveAsteroidsJobHandle = moveAsteroidsJob.Schedule(m_AsterboidAccessArray,directionJobHandle);
 
-        jobHandle.Complete();
+        UpdateAsterboidInfoJob updateAsterboidInfoJob = CreateStoreAsterboidForwardsJob();
+        JobHandle UpdateInfoJobHandle = updateAsterboidInfoJob.Schedule(m_AsterboidAccessArray, JobHandle.CombineDependencies(directionJobHandle,moveAsteroidsJobHandle));
 
-        //AsterboidPositions.Dispose();
-        //AsterboidForwards.Dispose();
+        
+        directionJobHandle.Complete();
+        moveAsteroidsJobHandle.Complete();
+        UpdateInfoJobHandle.Complete();
+       
+ /*
+        TransformJob transformJob = CreateJobs.CreateTransfromJob(AsterboidPositions, AsterboidVelocities,
+            AsterboidRotations, transform.forward, ControllerPosition, rotationCoeff, Time.deltaTime, neighborDist, BoidSpeed);
+        JobHandle transformJobHandle = transformJob.Schedule(m_AsterboidAccessArray);
+
+        UpdateAsterboidInfoJob updateAsterboidInfoJob =
+            CreateJobs.CreateStoreAsterboidForwardsJob(AsterboidPositions, AsterboidRotations);
+        JobHandle UpdateInfoJobHandle = updateAsterboidInfoJob.Schedule(m_AsterboidAccessArray, transformJobHandle);
+
+        transformJobHandle.Complete();
+        UpdateInfoJobHandle.Complete();
+         */
+
     }
 
     public GameObject Spawn() {
@@ -86,8 +107,10 @@ public class BoidController : MonoBehaviour {
         AsterboidsReferences = new Transform[spawnCount];
         m_AsterboidAccessArray = new TransformAccessArray(AsterboidsReferences);
         AsterboidPositions = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
-        AsterboidForwards = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
-        AsterboidDirections = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
+        AsterboidVelocities = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
+        AsterboidRotations = new NativeArray<Quaternion>(spawnCount, Allocator.Persistent);
+        AsterboidVectorRotations = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
+        testVectors = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
         for (var i = 0; i < spawnCount; i++) {
             AsterboidsReferences[i] = Spawn().GetComponent<Transform>();
             m_AsterboidAccessArray[i] = AsterboidsReferences[i];
@@ -97,47 +120,45 @@ public class BoidController : MonoBehaviour {
 
     private void OnDestroy() {
         AsterboidPositions.Dispose();
-        AsterboidForwards.Dispose();
-        AsterboidDirections.Dispose();
+        AsterboidVelocities.Dispose();
+        AsterboidRotations.Dispose();
+        AsterboidVectorRotations.Dispose();
         m_AsterboidAccessArray.Dispose();
+        testVectors.Dispose();
     }
 
-    private BoidDirectionJob CreateBoidDirectionJob() {
+    private BoidDirectionJob CreateBoidDirectionJob(float deltaTime) {
         return new BoidDirectionJob {
-            controllerPosition = ControllerPosition,
-            controllerRotation = transform.rotation.eulerAngles,
-            controllerForward = transform.forward,
-            controllerVelocity = ControllerVelocity,
-            controllerVelocityVariation = ControllerVelocity,
-            controllerNeighbourDist = neighborDist,
             asterboidPositions = AsterboidPositions,
-            asterboidForwards = AsterboidForwards,
-            asterboidDirections = AsterboidDirections
+            asterboidVelocities = AsterboidVelocities,
+            asterboidRotations = AsterboidRotations,
+            
+            controllerPosition = ControllerPosition,
+            controllerForward = transform.forward,
+            controllerNeighbourDist = neighborDist,
+       
+            //testVectors = testVectors,
+            _rotationCoeff = rotationCoeff,
+            _deltaTime = deltaTime,
+            _speed = BoidSpeed
         };
     }
-
- 
-        public struct VelocityJob : IJobParallelForTransform {
-            // Jobs declare all data that will be accessed in the job
-            // By declaring it as read only, multiple jobs are allowed to access the data in parallel
-            [ReadOnly] public NativeArray<Vector3> velocity;
-
-            // Delta time must be copied to the job since jobs generally don't have a concept of a frame.
-            // The main thread waits for the job same frame or next frame, but the job should do work deterministically
-            // independent on when the job happens to run on the worker threads.
-            public float deltaTime;
-
-            // The code actually running on the job
-            public void Execute(int index, TransformAccess transform) {
-                // Move the transforms based on delta time and velocity
-                var pos = transform.position;
-                var rotation = Quaternion.FromToRotation(Vector3.forward,velocity[index].normalized);
-                var ip = Mathf.Exp(- 4.0f * deltaTime);
-                transform.rotation = Quaternion.Slerp(rotation, transform.rotation, ip);
-                
-                transform.position =  pos +  transform.rotation * Vector3.forward * (5f * deltaTime);
-            }
-        }
+    
+    private MoveAsteroidsJob CreateMoveAsteroidJob(float deltaTime) {
+        return new MoveAsteroidsJob{
+            _asterboidPositions = AsterboidPositions,
+             _asterboidRotations = AsterboidRotations,
+             _asterboidVelocities = AsterboidVelocities,
+             _deltaTime = deltaTime
+        };
+    }
+    public UpdateAsterboidInfoJob CreateStoreAsterboidForwardsJob() {
+        return new UpdateAsterboidInfoJob {
+            _asterboidPositions = AsterboidPositions,
+            _asterboidRotations = AsterboidRotations
+        };
+    }
+      
     }
 
 
