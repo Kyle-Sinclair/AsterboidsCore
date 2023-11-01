@@ -205,14 +205,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.531093, y: -0, z: -0, w: 0.8473135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.24, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 64.159, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,84 +424,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1080677035
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4753357073809493875, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: spawnCount
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538429691746785825, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8399305794080544850, guid: 3bf792836eba6264ca278316fc0c0d97,
-        type: 3}
-      propertyPath: m_Name
-      value: Boid Controller
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3bf792836eba6264ca278316fc0c0d97, type: 3}
 --- !u!1 &1307293568
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,10 +453,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf76ac73a910a7548bb772e922da00d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _config: {fileID: 11400000, guid: c9751c2aba76fa146b20a8832bf22e3c, type: 2}
   _playerPrefab: {fileID: 4813728905012718900, guid: 3b3f3a98d30d8c74eaf5a0060464b33b,
     type: 3}
   _boidControllerPrefab: {fileID: 4753357073809493875, guid: 3bf792836eba6264ca278316fc0c0d97,
+    type: 3}
+  _cameraManager: {fileID: 4792367834200328626, guid: 406d2fbf098229a4d81335feef66c5b5,
+    type: 3}
+  _asterboidManager: {fileID: 6323926055318126777, guid: cda4ca9acf6e41749a2fd9d3b31397a7,
     type: 3}
 --- !u!4 &1307293570
 Transform:

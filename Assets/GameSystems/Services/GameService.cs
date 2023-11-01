@@ -1,6 +1,6 @@
 namespace GameSystems.Services {
-   public abstract class GameService {
+   public interface IGameService {
 
-      public abstract void ConfigureService();
+      public void ConfigureService();
    }
 }

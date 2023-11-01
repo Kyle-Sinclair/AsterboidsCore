@@ -12,9 +12,9 @@ namespace GameSystems.Services {
         public static ServiceLocator Current { get; private set; }
 
         [SerializeField]
-        private readonly Dictionary<string, GameService> _services = new Dictionary<string, GameService>();
+        private readonly Dictionary<string, IGameService> _services = new Dictionary<string, IGameService>();
 
-        public T Get<T>() where T : GameService
+        public T Get<T>() where T : IGameService
         {
             string key = typeof(T).Name;
             if (!_services.ContainsKey(key))
@@ -26,7 +26,7 @@ namespace GameSystems.Services {
             return (T)_services[key];
         }
         
-        public void Register<T>(T service) where T : GameService
+        public void Register<T>(T service) where T : IGameService
         {
             string key = typeof(T).Name;
             if (_services.ContainsKey(key))
@@ -44,7 +44,7 @@ namespace GameSystems.Services {
         /// Unregisters the service from the current service locator.
         /// </summary>
         /// <typeparam name="T">Service type.</typeparam>
-        public void Unregister<T>() where T : GameService
+        public void Unregister<T>() where T : IGameService
         {
             string key = typeof(T).Name;
             if (!_services.ContainsKey(key))
@@ -58,7 +58,11 @@ namespace GameSystems.Services {
 
         public void ConfigureServices() {
             foreach (var VARIABLE in _services) {
+
+#if UNITY_EDITOR
                 Debug.Log("configuring" + VARIABLE);
+#endif
+
                 VARIABLE.Value.ConfigureService();
             }
         }

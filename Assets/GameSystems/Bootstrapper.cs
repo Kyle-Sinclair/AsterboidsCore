@@ -10,40 +10,51 @@ namespace GameSystems {
         [SerializeField] private Player _playerPrefab;
         [SerializeField] private BoidController _boidControllerPrefab;
 
+       
+        [Header("Service Prefabs")] 
+        [SerializeField] private GameObject _cameraManager;
+        [SerializeField] private GameObject _asterboidManager;
+
+        
         [Header("Services")] 
-        private CameraManager _cameraManager;
         private ConfigManager _configManager;
-        private AsterboidManager _asterboidManager;
+        private CameraManager _cameraManagerRef;
+        private AsterboidsManager _asterboidManagerRef;
 
 
         private void Start() {
             Init();
         }
 
+        private void Update() {
 
+
+
+        }
         void Init() {
             CreateServices();
             RegisterServices();
             ConfigureServices();
-            
+            Instantiate(_playerPrefab);
         }
 
+        
+
         private void CreateServices() {
-            _cameraManager = new CameraManager();
             _configManager = new ConfigManager();
-            _asterboidManager = new AsterboidManager();
+            _cameraManagerRef =  Instantiate(_cameraManager,this.transform).GetComponent<CameraManager>();
+            _asterboidManagerRef = Instantiate(_asterboidManager,this.transform).GetComponent<AsterboidsManager>();
         }
 
         private void RegisterServices() {
             ServiceLocator.Current.Register(_configManager);
-
-            ServiceLocator.Current.Register(_cameraManager);
-            ServiceLocator.Current.Register(_asterboidManager);
+            ServiceLocator.Current.Register(_cameraManagerRef);
+            ServiceLocator.Current.Register(_asterboidManagerRef);
         }
         private void ConfigureServices() {
             ServiceLocator.Current.ConfigureServices();
         }
-
+       
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 
         public static void InitializeServiceLocator() {
@@ -54,11 +65,7 @@ namespace GameSystems {
             }
 
         }
-        internal class AsterboidManager : GameService {
-            public override void ConfigureService() {
-
-            }
-        }
+  
 
        
     }

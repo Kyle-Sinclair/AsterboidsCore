@@ -2,7 +2,7 @@ using Config;
 using UnityEngine;
 
 namespace GameSystems.Services {
-    public class ConfigManager : GameService
+    public class ConfigManager : IGameService
     {
         private ConfigScriptable _config;
 
@@ -10,8 +10,7 @@ namespace GameSystems.Services {
             return _config;
         }
 
-        public override void ConfigureService() {
-            Debug.Log("configuring config manager");
+        public void ConfigureService() {
             _config = Resources.Load<ConfigScriptable>("ConfigFile");
             if (_config == null) {
                 Debug.LogError("Configuration data stored incorrectly");
