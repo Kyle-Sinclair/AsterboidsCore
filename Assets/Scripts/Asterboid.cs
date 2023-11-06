@@ -28,6 +28,8 @@ public class Asterboid : MonoBehaviour
 
         return diff * (scaler / diffLen);
     }
+    
+    
 
  
 

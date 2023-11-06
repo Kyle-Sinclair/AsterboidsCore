@@ -32,7 +32,6 @@ namespace GameSystems {
 
             for (int i = 0; i < _activeBoidControllers.Length; i++) {
                 _activeBoidControllers[i] = Instantiate(_boidControllerPrefab,_config.PlayerStartPosition + _config.BoidcontrollerSpawnDistance,Quaternion.identity).GetComponent<BoidController>();
-                
                 _activeBoidControllers[i].Init(_config._boidAverageAsterboids);
             }
         }

@@ -9,11 +9,13 @@ using Unity.Mathematics;
 using UnityEngine.Jobs;
 using Random = UnityEngine.Random;
 
-public abstract class BoidController : MonoBehaviour {
+public class BoidController : MonoBehaviour {
 
 
 
-    public abstract Delegate OnDeath();
+    public delegate void BoidControllerDied();
+    public event BoidControllerDied BoidControllerDiedInfo;   
+    
     [Header("Standard Boid Implementation")]
     public GameObject BoidPrefab;
 
@@ -177,6 +179,7 @@ public abstract class BoidController : MonoBehaviour {
         };
     }
 
+    
     public void RecieveDeathNotifiation() {
         _currentAsterboidCount--;
         if (_currentAsterboidCount <= 0) {
@@ -185,6 +188,7 @@ public abstract class BoidController : MonoBehaviour {
     }
 
     private void DieAndRespawn() {
+        Destroy(this);
         int newAsterboidCount = Random.Range(1, _maxAsterboidCount);
         _currentAsterboidCount = newAsterboidCount;
         for (var i = 0; i < spawnCount; i++) {
