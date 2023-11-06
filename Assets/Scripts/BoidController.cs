@@ -86,7 +86,7 @@ public class BoidController : MonoBehaviour {
         moveAsteroidsJobHandle.Complete();
         UpdateInfoJobHandle.Complete();
     }
-    /*
+    
     private void Update() {
         if (!Initialized) return;
         KillAsterboids();
@@ -97,7 +97,7 @@ public class BoidController : MonoBehaviour {
 
         MaintainAsterboids(delta);
     }
-*/
+
     private void Move(float deltaTime) {
         transform.position += _velocity * deltaTime;
 
@@ -116,10 +116,10 @@ public class BoidController : MonoBehaviour {
         ControllerPosition = transform.position;
         
       
-       /*
+       
         BoidDirectionJob directionJob = CreateBoidDirectionJob(deltaTime);
-        JobHandle directionJobHandle = directionJob.Schedule(); 
-        */
+         directionJobHandle = directionJob.Schedule(); 
+        
     
         
         moveAsteroidsJob = CreateMoveAsteroidJob(deltaTime);

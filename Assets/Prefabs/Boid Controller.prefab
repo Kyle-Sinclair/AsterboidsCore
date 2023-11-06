@@ -122,7 +122,7 @@ MonoBehaviour:
   BoidPrefab: {fileID: 3412058560641070866, guid: 2550279a8f67dcb4aadb276209815724,
     type: 3}
   spawnRadius: 5
-  innerloopBatchCount: 128
+  innerloopBatchCount: 64
   ControllerVelocity: 2.1
   ControllerVelocityVariation: 0.254
   rotationCoeff: 20
@@ -131,7 +131,7 @@ MonoBehaviour:
   ControllerSeparationForce: 2
   ControllerAlignmentForce: 2
   AsterboidTransformReferences: []
-  BoidSpeed: 7
+  BoidSpeed: 3
   ControllerPosition:
     x: 0
     y: 0

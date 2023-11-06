@@ -29,6 +29,7 @@ namespace GameSystems {
         }
 
         public void Update() {
+            
             float delta = Time.deltaTime;
 
             for (int i = 0; i < _activeBoidControllers.Length; i++) {
