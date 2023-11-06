@@ -13,7 +13,6 @@ namespace Jobs {
         public NativeArray<Quaternion> asterboidRotations;
         
         [ReadOnly] public Vector3 controllerPosition;
-        [ReadOnly] public Vector3 controllerForward;
         [ReadOnly] public float controllerNeighbourDist;
         [ReadOnly] public float  _controllerCohesionForce;   
         [ReadOnly] public float _controllerSeparationForce;
@@ -68,7 +67,7 @@ namespace Jobs {
             
 
                 var rotation = Quaternion.FromToRotation(Vector3.forward, vel.normalized);
-               if (rotation != currentRotation)
+                if (rotation != currentRotation)
                 {
                     var ip = Mathf.Exp(-_rotationCoeff * _deltaTime);
                     asterboidRotations[i] = Quaternion.Slerp(rotation, currentRotation, ip);

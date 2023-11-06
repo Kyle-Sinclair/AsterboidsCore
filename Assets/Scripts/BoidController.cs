@@ -87,9 +87,7 @@ public class BoidController : MonoBehaviour {
     void MaintainAsterboids(float deltaTime) {
         ControllerPosition = transform.position;
         
-        for (var i = 0; i < spawnCount; i++) {
-            AsterboidPositions[i] = AsterboidTransformReferences[i].transform.position;
-        }
+      
        
         BoidDirectionJob directionJob = CreateBoidDirectionJob(deltaTime);
         JobHandle directionJobHandle = directionJob.Schedule();
@@ -138,7 +136,9 @@ public class BoidController : MonoBehaviour {
             m_AsterboidAccessArray[i] = AsterboidTransformReferences[i];
             AsterboidReferences[i] = spawned.GetComponent<Asterboid>();
         }
-
+        for (var i = 0; i < spawnCount; i++) {
+            AsterboidPositions[i] = AsterboidTransformReferences[i].transform.position;
+        }
         Initialized = true;
     }
 
@@ -158,7 +158,6 @@ public class BoidController : MonoBehaviour {
             asterboidRotations = AsterboidRotations,
             
             controllerPosition = ControllerPosition,
-            controllerForward = transform.forward,
             controllerNeighbourDist = neighborDist,
              _controllerCohesionForce = ControllerCohesionForce,   
              _controllerSeparationForce = ControllerSeparationForce,
