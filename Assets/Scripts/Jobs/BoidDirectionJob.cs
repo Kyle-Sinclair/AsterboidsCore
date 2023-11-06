@@ -36,6 +36,7 @@ namespace Jobs {
                 var cohesion = controllerPosition;
 
                 int neighbourCount = 0;
+                
                 for(int index = 0; index < asterboidPositions.Length; index++)
                 {
                     if (index == i) {
