@@ -120,14 +120,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoidPrefab: {fileID: 3412058560641070866, guid: 2550279a8f67dcb4aadb276209815724,
     type: 3}
-  spawnCount: 20
   spawnRadius: 4
   ControllerVelocity: 20
   ControllerVelocityVariation: 0.5
-  rotationCoeff: 4
-  neighborDist: 8.78
+  rotationCoeff: 20
+  neighborDist: 2
   AsterboidTransformReferences: []
-  BoidSpeed: 5
+  BoidSpeed: 9.44
   ControllerPosition:
     x: 0
     y: 0
