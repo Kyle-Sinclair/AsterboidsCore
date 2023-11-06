@@ -1,6 +1,6 @@
 # AsterboidsCore
 
- Intention of this project is to bring a boiding protocol, which are very common in C#, into the Unity DOTS system. 
+Intention of this project is to bring a boiding protocol, which are very common in C#, into the Unity DOTS system. 
 
 The basic boids core implementation was taken from here: https://github.com/keijiro/Boids/tree/7eb25a1a5a65a04427bbb4070184c59a4af7b354
 
@@ -20,10 +20,11 @@ roughly 30% of our main thread per frame. Secondly, since all the objects have t
 obvious issues ala [10000 update calls](https://blog.unity.com/engine-platform/10000-update-calls)
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Profiler-PhysicsAllocUpdateCost.png).
 
+Since ultimately all that needs to be found in the physics sphere check is the position of nearby boids, this area is obviously ripe for
+incorporation into a burst job. 
 
-lots of attempts to optimise it, such as Sebastian Lague here: https://www.youtube.com/watch?v=bqtqltqcQhw&ab_channel=SebastianLague
 
-boids core code was taken from here: https://github.com/keijiro/Boids/tree/7eb25a1a5a65a04427bbb4070184c59a4af7b354
+
 
 
 Downside of this method 
