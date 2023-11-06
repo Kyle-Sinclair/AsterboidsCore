@@ -11,7 +11,8 @@ public class Asterboid : MonoBehaviour
     public BoidController Controller;
 
     public int Index { get; set; }
-    private MeshRenderer renderers; 
+    private MeshRenderer renderers;
+    public Color color;
     private Collider sphereCollider; 
     // Random seed.
     float noiseOffset;
@@ -56,5 +57,9 @@ public class Asterboid : MonoBehaviour
         renderers.enabled = true;
         sphereCollider.enabled = true;
     }
-    
+
+    public void SetColor(Color newcolor) {
+        this.color = newcolor;
+        renderers.material.color = newcolor;
+    }
 }

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ConfigFile
   m_EditorClassIdentifier: 
   PlayerStartPosition: {x: 0, y: 0, z: 0}
-  BoidcontrollerSpawnDistance: {x: 0, y: 5, z: 10}
-  CameraDistance: {x: 0, y: 5, z: -10}
+  BoidcontrollerSpawnDistance: {x: 0, y: 0, z: 15}
+  CameraDistance: {x: 0, y: 5, z: -25}
   PlayerSpeed: 10
   _boidSpawnDistance: 19.6
-  _boidAverageAsterboids: 3000
+  _boidAverageAsterboids: 1000
   _boidControllerAverageCount: 5
   _boidControllerAverageSpiralTightness: 5
   BoidControllerPrefab: {fileID: 8399305794080544850, guid: 3bf792836eba6264ca278316fc0c0d97,

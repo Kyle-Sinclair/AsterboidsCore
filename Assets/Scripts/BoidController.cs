@@ -14,8 +14,8 @@ public class BoidController : MonoBehaviour {
 
 
     public delegate void BoidControllerDied();
-    public event BoidControllerDied BoidControllerDiedInfo;   
-    
+    public event BoidControllerDied BoidControllerDiedInfo;
+    public Color color;
     [Header("Standard Boid Implementation")]
     public GameObject BoidPrefab;
 
@@ -40,6 +40,16 @@ public class BoidController : MonoBehaviour {
     private int _maxAsterboidCount;
     private bool Initialized = false;
 
+    
+    private BoidDirectionParallelJob directionJob;
+    private JobHandle directionJobHandle;
+        
+    private MoveAsteroidsJob moveAsteroidsJob;
+    private JobHandle moveAsteroidsJobHandle;
+        
+    private UpdateAsterboidInfoJob updateAsterboidInfoJob ;
+    private JobHandle UpdateInfoJobHandle;
+    
     public Queue<int> _indicesToKill;
     public TransformAccessArray m_AsterboidAccessArray;
     public NativeArray<Vector3> AsterboidPositions;
@@ -60,9 +70,23 @@ public class BoidController : MonoBehaviour {
     private Vector3 _target = new Vector3();
     private Vector3 _velocity = new Vector3();
 
-   
+    public void FirstUpdate() {
+        KillAsterboids();
+    }
+    public void EarlyUpdate(float delta) {
+        directionJob = CreateBoidParallelDirectionJob(delta);
+        directionJobHandle = directionJob.Schedule(spawnCount,innerloopBatchCount);
+    }
+    public void GameUpdate(float delta) {
+        MaintainAsterboids(delta);
+    }
 
-
+    public void LastUpdate() {
+        
+        moveAsteroidsJobHandle.Complete();
+        UpdateInfoJobHandle.Complete();
+    }
+    /*
     private void Update() {
         if (!Initialized) return;
         KillAsterboids();
@@ -73,7 +97,7 @@ public class BoidController : MonoBehaviour {
 
         MaintainAsterboids(delta);
     }
-
+*/
     private void Move(float deltaTime) {
         transform.position += _velocity * deltaTime;
 
@@ -96,17 +120,14 @@ public class BoidController : MonoBehaviour {
         BoidDirectionJob directionJob = CreateBoidDirectionJob(deltaTime);
         JobHandle directionJobHandle = directionJob.Schedule(); 
         */
-        BoidDirectionParallelJob directionJob = CreateBoidParallelDirectionJob(deltaTime);
-        JobHandle directionJobHandle = directionJob.Schedule(spawnCount,innerloopBatchCount);
+    
         
-        MoveAsteroidsJob moveAsteroidsJob = CreateMoveAsteroidJob(deltaTime);
-        JobHandle moveAsteroidsJobHandle = moveAsteroidsJob.Schedule(m_AsterboidAccessArray,directionJobHandle);
+        moveAsteroidsJob = CreateMoveAsteroidJob(deltaTime);
+        moveAsteroidsJobHandle = moveAsteroidsJob.Schedule(m_AsterboidAccessArray,directionJobHandle);
         
-        UpdateAsterboidInfoJob updateAsterboidInfoJob = CreateStoreAsterboidForwardsJob();
-        JobHandle UpdateInfoJobHandle = updateAsterboidInfoJob.Schedule(m_AsterboidAccessArray, JobHandle.CombineDependencies(directionJobHandle,moveAsteroidsJobHandle));
-        directionJobHandle.Complete();
-        moveAsteroidsJobHandle.Complete();
-        UpdateInfoJobHandle.Complete();
+        updateAsterboidInfoJob = CreateStoreAsterboidForwardsJob();
+        UpdateInfoJobHandle = updateAsterboidInfoJob.Schedule(m_AsterboidAccessArray, JobHandle.CombineDependencies(directionJobHandle,moveAsteroidsJobHandle));
+    
     }
 
     void CleanOutDeadAsterboids() {

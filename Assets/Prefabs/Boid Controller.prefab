@@ -118,19 +118,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281818ec2a71e754388cbb0ead2d855c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 0, g: 0, b: 0, a: 0}
   BoidPrefab: {fileID: 3412058560641070866, guid: 2550279a8f67dcb4aadb276209815724,
     type: 3}
   spawnRadius: 5
-  innerloopBatchCount: 256
+  innerloopBatchCount: 128
   ControllerVelocity: 2.1
   ControllerVelocityVariation: 0.254
   rotationCoeff: 20
-  neighborDist: 2
-  ControllerCohesionForce: 3
+  neighborDist: 1
+  ControllerCohesionForce: 5
   ControllerSeparationForce: 2
-  ControllerAlignmentForce: 3
+  ControllerAlignmentForce: 2
   AsterboidTransformReferences: []
-  BoidSpeed: 4
+  BoidSpeed: 7
   ControllerPosition:
     x: 0
     y: 0

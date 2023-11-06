@@ -49,6 +49,7 @@ public class Player : MonoBehaviour {
     void Initialize() {
         ConfigScriptable _config = ServiceLocator.Current.Get<ConfigManager>().GetConfig();
         _speed = _config.PlayerSpeed;
+        transform.position = _config.PlayerStartPosition;
 
 
     }
