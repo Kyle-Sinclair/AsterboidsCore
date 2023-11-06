@@ -61,14 +61,15 @@ any further without exploring methods such as vectorisation.
 Rendering and physics are also becoming bottlenecks, so exploring GPU instanced meshes and ECS' collisiion system would probably also become more 
 realistic methods for moving forward. 
 
-#Dead Transforms
+# Dead Transforms
 
 Also of importance with a game like this is minimizing allocations which can cause delays or complicated data rearrangements in our collection when an 
 object is killed. In order to avoid complicated asteroid death methods that dynamically reallocate dead asteroid's data to one end of the array, I 
 simply started keeping track of currently 'alive' asteroids as a boolean array, and skipping dead asteroids contribution to the boid calculations.
 
-
-
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/live%20asterboids%20array.png?raw=true).
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/live%20asterboids%20check.png?raw=true).
+
+A 'dead' asteroid in this manner will tend to gravitate to its boid controller's position, where its respawning is as simple as reactivating rendering and 
+collisions. 
