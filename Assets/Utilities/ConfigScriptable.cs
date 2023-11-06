@@ -17,7 +17,7 @@ namespace Config {
         [Header("Boid Configuration")]
 
         [SerializeField]    [Range(15f, 50f)] public float _boidSpawnDistance;
-        [SerializeField]    [Range(10,100)] public int _boidAverageAsterboids;
+        [SerializeField]    [Range(10,1000)] public int _boidAverageAsterboids;
         [SerializeField]    [Range(1,5)] public int _boidControllerAverageCount;
         [SerializeField]    [Range(0.1f, 10.0f)] public float _boidControllerAverageSpiralTightness;
         

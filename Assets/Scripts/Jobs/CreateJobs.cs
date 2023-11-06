@@ -19,28 +19,5 @@ namespace Jobs {
                 _asterboidRotations = AsterboidRotations
             };
         }
-
-        public static TransformJob CreateTransfromJob(NativeArray<Vector3> AsterboidPositions,
-            NativeArray<Vector3> AsterboidVelocities,
-            NativeArray<Quaternion> AsterboidRotations,
-            Vector3 ControllerForward,
-            Vector3 ControllerPosition,
-            float RotationCoeff,
-            float DeltaTime,
-            float ControllerNeighbourDist,
-            float Speed) {
-
-            return new TransformJob {
-                boidPositions = AsterboidPositions,
-                boidRotations = AsterboidRotations,
-                controllerFoward = ControllerForward,
-                boidVelocities = AsterboidVelocities,
-                controllerPosition = ControllerPosition,
-                rotationCoeff = RotationCoeff,
-                deltaTime = DeltaTime,
-                neighborDist = ControllerNeighbourDist,
-                speed = Speed
-            };
-        }
     }
 }

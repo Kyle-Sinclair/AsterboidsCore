@@ -27,7 +27,7 @@ namespace GameSystems {
         }
 
         private void Initialize() {
-            _activeBoidControllers = new BoidController[_boidControllerAverageCount + 5];
+            _activeBoidControllers = new BoidController[_boidControllerAverageCount];
             ConfigScriptable _config =  ServiceLocator.Current.Get<ConfigManager>().GetConfig();
 
             for (int i = 0; i < _activeBoidControllers.Length; i++) {

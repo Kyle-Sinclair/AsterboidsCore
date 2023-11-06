@@ -19,7 +19,7 @@ public class BoidController : MonoBehaviour {
     [Header("Standard Boid Implementation")]
     public GameObject BoidPrefab;
 
-    public int spawnCount = 10;
+    private int spawnCount = 10;
 
     public float spawnRadius = 4.0f;
 
