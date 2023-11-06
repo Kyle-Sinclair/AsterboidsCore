@@ -49,13 +49,8 @@ quickly the jobs need one another, this may not be possible to remove. Nonethele
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20timeline%20view.png).
 
+We can try sorting out the jobs to be scheduled into distinct called phases of the frame, coordinated from a manager class
 
-Downside of this method 
 
-- IJobParallelTransformFor interacts with the transform heirarchy's automessaging, meaning that the unity object
-  heirarchy can get very messy if you want the max speed up.
-  
+![alt text]([https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20timeline%20view.png](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Logical%20boids.png)).
 
-step 1: Base Line Boids - 50 boids tanks frame rate to 50fps. Bad!
-
-Step 2: Basic job for calculating needed info than paralel job for movement
