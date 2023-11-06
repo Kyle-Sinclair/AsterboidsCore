@@ -52,5 +52,5 @@ quickly the jobs need one another, this may not be possible to remove. Nonethele
 We can try sorting out the jobs to be scheduled into distinct called phases of the frame, coordinated from a manager class
 
 
-![alt text]([https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20timeline%20view.png](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Logical%20boids.png)).
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Logical%20boids.png).
 
