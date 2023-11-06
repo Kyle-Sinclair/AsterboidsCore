@@ -1,3 +1,4 @@
+using System;
 using Config;
 using GameSystems.Services;
 using Unity.VisualScripting;
@@ -24,6 +25,12 @@ namespace GameSystems {
             _boidControllerAverageCount = _config._boidControllerAverageCount;
             _asterboidAverageCount = _config._boidAverageAsterboids;
             Initialize();
+        }
+
+        public void Update() {
+            for (int i = 0; i < _activeBoidControllers.Length; i++) {
+                //_activeBoidControllers[i].GameUpdate();
+            }
         }
 
         private void Initialize() {

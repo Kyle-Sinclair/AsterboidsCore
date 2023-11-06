@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -13,5 +14,9 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update() {
         transform.position += transform.forward * (Time.deltaTime * 5f);
+
+        if (transform.position.z > 50f) {
+            Destroy(this);
+        }
     }
 }

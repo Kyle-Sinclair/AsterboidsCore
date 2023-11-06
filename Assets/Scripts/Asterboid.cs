@@ -11,7 +11,8 @@ public class Asterboid : MonoBehaviour
     public BoidController Controller;
 
     public int Index { get; set; }
-
+    private MeshRenderer renderers; 
+    private Collider sphereCollider; 
     // Random seed.
     float noiseOffset;
 
@@ -29,10 +30,12 @@ public class Asterboid : MonoBehaviour
 
         return diff * (scaler / diffLen);
     }
-    
-    
 
- 
+
+    public void Start() {
+        renderers = GetComponentInChildren<MeshRenderer>();
+        sphereCollider = GetComponentInChildren<Collider>();
+    }
 
 
     private void OnTriggerEnter(Collider other) {
@@ -44,17 +47,13 @@ public class Asterboid : MonoBehaviour
 
     private void RenderInactive() {
         Controller.RecieveDeathNotifiation(Index);
-        MeshRenderer renderers = GetComponentInChildren<MeshRenderer>();
         renderers.enabled = false;
-        Collider sphereCollider = GetComponentInChildren<Collider>();
         sphereCollider.enabled = false;
     }
 
     public void Reactivate() {
         IsStruck = false;
-        MeshRenderer renderers = GetComponentInChildren<MeshRenderer>();
         renderers.enabled = true;
-        Collider sphereCollider = GetComponentInChildren<Collider>();
         sphereCollider.enabled = true;
     }
     

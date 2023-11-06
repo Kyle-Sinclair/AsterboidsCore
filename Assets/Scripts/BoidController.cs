@@ -22,6 +22,7 @@ public class BoidController : MonoBehaviour {
     private int spawnCount = 10;
 
     public float spawnRadius = 4.0f;
+    public int innerloopBatchCount = 16;
 
     [Range(0.1f, 20.0f)] public float ControllerVelocity = 6.0f;
 
@@ -91,9 +92,12 @@ public class BoidController : MonoBehaviour {
         ControllerPosition = transform.position;
         
       
-       
+       /*
         BoidDirectionJob directionJob = CreateBoidDirectionJob(deltaTime);
-        JobHandle directionJobHandle = directionJob.Schedule();
+        JobHandle directionJobHandle = directionJob.Schedule(); 
+        */
+        BoidDirectionParallelJob directionJob = CreateBoidParallelDirectionJob(deltaTime);
+        JobHandle directionJobHandle = directionJob.Schedule(spawnCount,innerloopBatchCount);
         
         MoveAsteroidsJob moveAsteroidsJob = CreateMoveAsteroidJob(deltaTime);
         JobHandle moveAsteroidsJobHandle = moveAsteroidsJob.Schedule(m_AsterboidAccessArray,directionJobHandle);
@@ -177,6 +181,24 @@ public class BoidController : MonoBehaviour {
             _speed = BoidSpeed
         };
     }
+    private BoidDirectionParallelJob CreateBoidParallelDirectionJob(float deltaTime) {
+        return new BoidDirectionParallelJob() {
+            asterboidPositions = AsterboidPositions,
+            asterboidVelocities = AsterboidVelocities,
+            asterboidRotations = AsterboidRotations,
+            
+            controllerPosition = ControllerPosition,
+            controllerNeighbourDist = neighborDist,
+             _controllerCohesionForce = ControllerCohesionForce,   
+             _controllerSeparationForce = ControllerSeparationForce,
+             _controllerAlignmentForce = ControllerAlignmentForce,
+             _liveAsterboids = LiveAsterboids,
+            //testVectors = testVectors,
+            _rotationCoeff = rotationCoeff,
+            _deltaTime = deltaTime,
+            _speed = BoidSpeed
+        };
+    }
     
     private MoveAsteroidsJob CreateMoveAsteroidJob(float deltaTime) {
         return new MoveAsteroidsJob{
@@ -205,10 +227,14 @@ public class BoidController : MonoBehaviour {
         while (_indicesToKill.Count > 0) {
             int target = _indicesToKill.Dequeue();
             LiveAsterboids[target] = false;
-            Debug.Log("killing asterboid with index " + target + ". Controller has " + _currentAsterboidCount + " remaining.");
+
+#if UNITY_EDITOR
+            Debug.Log("killing asterboid with index " + target + ". Controller has " + _currentAsterboidCount +
+                      " remaining.");
+#endif
 
         }
-        
+
         if (_currentAsterboidCount <= 0) {
             DieAndRespawn();
         }
@@ -225,7 +251,10 @@ public class BoidController : MonoBehaviour {
         //Destroy(this);
         int newAsterboidCount = Random.Range(1, _maxAsterboidCount);
         _currentAsterboidCount = newAsterboidCount;
+#if UNITY_EDITOR
         Debug.Log("Boid Controller has lost all asterboids and will reactive soon with " + _currentAsterboidCount + " reactivated asterboids");
+
+#endif
 
         for (var i = 0; i < _currentAsterboidCount; i++) {
             LiveAsterboids[i] = true;

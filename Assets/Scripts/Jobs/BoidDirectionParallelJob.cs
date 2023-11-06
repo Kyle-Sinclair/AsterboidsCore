@@ -1,0 +1,93 @@
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using UnityEngine;
+
+namespace Jobs {
+    [BurstCompile]
+
+    public struct BoidDirectionParallelJob : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<Vector3> asterboidPositions;
+        public NativeArray<Vector3> asterboidVelocities;
+        public NativeArray<Quaternion> asterboidRotations;
+        
+        [ReadOnly] public Vector3 controllerPosition;
+        [ReadOnly] public float controllerNeighbourDist;
+        [ReadOnly] public float  _controllerCohesionForce;   
+        [ReadOnly] public float _controllerSeparationForce;
+        [ReadOnly] public float _controllerAlignmentForce;
+     
+        [ReadOnly] public float  _deltaTime;   
+        [ReadOnly] public float _rotationCoeff;
+        [ReadOnly] public float _speed;
+        [ReadOnly] public NativeArray<bool> _liveAsterboids;
+
+
+       
+        Vector3 GetSeparationVector(Vector3 current, Vector3 targetPos)
+        {
+            var diff = current - targetPos;
+            var diffLen = diff.magnitude;
+            var scaler = Mathf.Clamp01(1.0f - diffLen / controllerNeighbourDist);
+            return diff * (scaler / diffLen);
+        }
+
+        public void Execute(int index) {
+            
+                var noise = Mathf.PerlinNoise(_deltaTime + index + 0.01f, index) * 2.0f - 1.0f;
+                var speed = _speed * (1.0f + noise * 0.5f);
+                var currentPosition = asterboidPositions[index];
+                var currentRotation = asterboidRotations[index];
+                
+                var separation = Vector3.zero;
+                var alignment = Vector3.zero;
+                var cohesion = controllerPosition;
+
+                int neighbourCount = 0;
+                
+                for(int i = 0; i < asterboidPositions.Length; i++)
+                {
+                    if (i == index) {
+                        neighbourCount++;
+
+                        continue;
+                    }
+
+                    if (!_liveAsterboids[i]) {
+                        continue;
+                    }
+                    if ((asterboidPositions[index] - asterboidPositions[i]).sqrMagnitude <=
+                        ((controllerNeighbourDist) * (controllerNeighbourDist))) {
+                        var targetPosition = asterboidPositions[i];
+                        separation += GetSeparationVector(currentPosition, targetPosition);
+                        alignment += asterboidRotations[index] * Vector3.forward ;
+                        cohesion += targetPosition;
+                        neighbourCount++;
+
+                    }
+                }
+                var avg = 1.0f / Mathf.Max(1,neighbourCount);
+                alignment *= avg;
+                cohesion *= avg;
+                cohesion = (cohesion - currentPosition).normalized;
+
+                var direction =  alignment + cohesion + separation;
+                var accel = alignment * _controllerAlignmentForce + cohesion * _controllerCohesionForce + separation * _controllerSeparationForce;
+                var vel = asterboidVelocities[index] + accel * _deltaTime;
+                vel = Vector3.ClampMagnitude(vel, speed);
+                asterboidVelocities[index] = vel;
+                
+            
+
+                var rotation = Quaternion.FromToRotation(Vector3.forward, vel.normalized);
+                if (rotation != currentRotation)
+                {
+                    var ip = Mathf.Exp(-_rotationCoeff * _deltaTime);
+                    asterboidRotations[index] = Quaternion.Slerp(rotation, currentRotation, ip);
+                }
+            
+        }
+    }
+}
+

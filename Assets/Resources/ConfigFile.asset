@@ -16,8 +16,8 @@ MonoBehaviour:
   BoidcontrollerSpawnDistance: {x: 0, y: 5, z: 10}
   CameraDistance: {x: 0, y: 5, z: -10}
   PlayerSpeed: 10
-  _boidSpawnDistance: 20.4
-  _boidAverageAsterboids: 1000
+  _boidSpawnDistance: 19.6
+  _boidAverageAsterboids: 3000
   _boidControllerAverageCount: 5
   _boidControllerAverageSpiralTightness: 5
   BoidControllerPrefab: {fileID: 8399305794080544850, guid: 3bf792836eba6264ca278316fc0c0d97,
