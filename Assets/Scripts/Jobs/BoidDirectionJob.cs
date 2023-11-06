@@ -15,6 +15,9 @@ namespace Jobs {
         [ReadOnly] public Vector3 controllerPosition;
         [ReadOnly] public Vector3 controllerForward;
         [ReadOnly] public float controllerNeighbourDist;
+        [ReadOnly] public float  _controllerCohesionForce;   
+        [ReadOnly] public float _controllerSeparationForce;
+        [ReadOnly] public float _controllerAlignmentForce;
      
         [ReadOnly] public float  _deltaTime;   
         [ReadOnly] public float _rotationCoeff;
@@ -30,7 +33,7 @@ namespace Jobs {
                 var currentRotation = asterboidRotations[i];
                 
                 var separation = Vector3.zero;
-                var alignment = controllerForward;
+                var alignment = Vector3.zero;
                 var cohesion = controllerPosition;
 
                 int neighbourCount = 0;
@@ -57,12 +60,14 @@ namespace Jobs {
                 cohesion = (cohesion - currentPosition).normalized;
 
                 var direction =  alignment + cohesion + separation;
-                var accel = alignment * 10f + cohesion * 30f + separation * 35f;
+                var accel = alignment * _controllerAlignmentForce + cohesion * _controllerCohesionForce + separation * _controllerSeparationForce;
                 var vel = asterboidVelocities[i] + accel * _deltaTime;
                 vel = Vector3.ClampMagnitude(vel, speed);
                 asterboidVelocities[i] = vel;
+                
+            
 
-                var rotation = Quaternion.FromToRotation(Vector3.forward, direction.normalized);
+                var rotation = Quaternion.FromToRotation(Vector3.forward, vel.normalized);
                if (rotation != currentRotation)
                 {
                     var ip = Mathf.Exp(-_rotationCoeff * _deltaTime);

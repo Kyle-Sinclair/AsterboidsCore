@@ -31,6 +31,10 @@ public class BoidController : MonoBehaviour {
 
     [Range(0.1f, 10.0f)] public float neighborDist = 2.0f;
     [Header("Optimised Boid Implementation")]
+    
+    [SerializeField] [Range(1f, 50.0f)] public float ControllerCohesionForce;   
+    [SerializeField] [Range(1f, 50.0f)] public float ControllerSeparationForce;
+    [SerializeField] [Range(1f, 50.0f)] public float ControllerAlignmentForce;
     private int _currentAsterboidCount;
     private int _maxAsterboidCount;
     private bool Initialized = false;
@@ -156,7 +160,9 @@ public class BoidController : MonoBehaviour {
             controllerPosition = ControllerPosition,
             controllerForward = transform.forward,
             controllerNeighbourDist = neighborDist,
-       
+             _controllerCohesionForce = ControllerCohesionForce,   
+             _controllerSeparationForce = ControllerSeparationForce,
+             _controllerAlignmentForce = ControllerAlignmentForce,
             //testVectors = testVectors,
             _rotationCoeff = rotationCoeff,
             _deltaTime = deltaTime,
