@@ -6,7 +6,7 @@ The basic boids core implementation was taken from here: https://github.com/keij
 
 This implementation has each boid use the Unity Physics system to locate its neighnours inside its own update loop. 
 
-![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/200%20Boids%20at%20low%20framerate.PNG?raw=true?raw=true)
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/200%20Boids%20at%20low%20framerate.PNG?raw=true?)
 
 The obvious target for reducing 
 
