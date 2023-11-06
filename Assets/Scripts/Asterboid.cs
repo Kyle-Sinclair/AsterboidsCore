@@ -10,7 +10,8 @@ public class Asterboid : MonoBehaviour
      // Reference to the controller.
     public BoidController Controller;
 
-    private int index;
+    public int Index { get; set; }
+
     // Random seed.
     float noiseOffset;
 
@@ -42,19 +43,19 @@ public class Asterboid : MonoBehaviour
     }
 
     private void RenderInactive() {
-        Controller.RecieveDeathNotifiation();
+        Controller.RecieveDeathNotifiation(Index);
         MeshRenderer renderers = GetComponentInChildren<MeshRenderer>();
         renderers.enabled = false;
-        Collider collider = GetComponentInChildren<Collider>();
-        collider.enabled = false;
+        Collider sphereCollider = GetComponentInChildren<Collider>();
+        sphereCollider.enabled = false;
     }
 
     public void Reactivate() {
         IsStruck = false;
         MeshRenderer renderers = GetComponentInChildren<MeshRenderer>();
         renderers.enabled = true;
-        Collider collider = GetComponentInChildren<Collider>();
-        collider.enabled = true;
+        Collider sphereCollider = GetComponentInChildren<Collider>();
+        sphereCollider.enabled = true;
     }
     
 }

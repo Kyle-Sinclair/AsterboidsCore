@@ -21,7 +21,8 @@ namespace Jobs {
         [ReadOnly] public float  _deltaTime;   
         [ReadOnly] public float _rotationCoeff;
         [ReadOnly] public float _speed;
-  
+        [ReadOnly] public NativeArray<bool> _liveAsterboids;
+
 
         public void Execute() {
             for (int i = 0; i < asterboidPositions.Length; i++) {
@@ -42,6 +43,10 @@ namespace Jobs {
                     if (index == i) {
                         neighbourCount++;
 
+                        continue;
+                    }
+
+                    if (!_liveAsterboids[index]) {
                         continue;
                     }
                     if ((asterboidPositions[i] - asterboidPositions[index]).sqrMagnitude <=

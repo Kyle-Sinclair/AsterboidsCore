@@ -39,9 +39,11 @@ public class BoidController : MonoBehaviour {
     private int _maxAsterboidCount;
     private bool Initialized = false;
 
+    public Queue<int> _indicesToKill;
     public TransformAccessArray m_AsterboidAccessArray;
     public NativeArray<Vector3> AsterboidPositions;
     public NativeArray<Vector3> testVectors;
+    public NativeArray<bool> LiveAsterboids;
     public NativeArray<Quaternion> AsterboidRotations;
     public NativeArray<Vector3> AsterboidVectorRotations;
     public NativeArray<Vector3> AsterboidVelocities;
@@ -62,6 +64,7 @@ public class BoidController : MonoBehaviour {
 
     private void Update() {
         if (!Initialized) return;
+        KillAsterboids();
         float delta = Time.deltaTime;
         CalculateDirectionVector();
         Move(delta);
@@ -129,16 +132,21 @@ public class BoidController : MonoBehaviour {
         AsterboidVelocities = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
         AsterboidRotations = new NativeArray<Quaternion>(spawnCount, Allocator.Persistent);
         AsterboidVectorRotations = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
+        LiveAsterboids = new NativeArray<bool>(spawnCount, Allocator.Persistent);
         testVectors = new NativeArray<Vector3>(spawnCount, Allocator.Persistent);
         for (var i = 0; i < spawnCount; i++) {
             var spawned = Spawn().GetComponent<Transform>();
             AsterboidTransformReferences[i] = spawned.GetComponent<Transform>();
             m_AsterboidAccessArray[i] = AsterboidTransformReferences[i];
             AsterboidReferences[i] = spawned.GetComponent<Asterboid>();
+            LiveAsterboids[i] = true;
+            AsterboidReferences[i].Index = i;
         }
         for (var i = 0; i < spawnCount; i++) {
             AsterboidPositions[i] = AsterboidTransformReferences[i].transform.position;
         }
+
+        _indicesToKill = new Queue<int>(spawnCount);
         Initialized = true;
     }
 
@@ -162,6 +170,7 @@ public class BoidController : MonoBehaviour {
              _controllerCohesionForce = ControllerCohesionForce,   
              _controllerSeparationForce = ControllerSeparationForce,
              _controllerAlignmentForce = ControllerAlignmentForce,
+             _liveAsterboids = LiveAsterboids,
             //testVectors = testVectors,
             _rotationCoeff = rotationCoeff,
             _deltaTime = deltaTime,
@@ -184,23 +193,44 @@ public class BoidController : MonoBehaviour {
         };
     }
 
-    
-    public void RecieveDeathNotifiation() {
-        _currentAsterboidCount--;
+    void Reactive() {
+        for (var i = 0; i < _currentAsterboidCount; i++) {
+            if(LiveAsterboids[i])
+            AsterboidReferences[i].Reactivate();
+        }
+
+    }
+
+    private void KillAsterboids() {
+        while (_indicesToKill.Count > 0) {
+            int target = _indicesToKill.Dequeue();
+            LiveAsterboids[target] = false;
+            Debug.Log("killing asterboid with index " + target + ". Controller has " + _currentAsterboidCount + " remaining.");
+
+        }
+        
         if (_currentAsterboidCount <= 0) {
             DieAndRespawn();
         }
     }
+    public void RecieveDeathNotifiation(int index) {
+        if (_currentAsterboidCount > 0) {
+
+            _currentAsterboidCount--;
+            _indicesToKill.Enqueue(index);
+        }
+    }
 
     private void DieAndRespawn() {
-        Destroy(this);
+        //Destroy(this);
         int newAsterboidCount = Random.Range(1, _maxAsterboidCount);
         _currentAsterboidCount = newAsterboidCount;
-        for (var i = 0; i < spawnCount; i++) {
-        
+        Debug.Log("Boid Controller has lost all asterboids and will reactive soon with " + _currentAsterboidCount + " reactivated asterboids");
+
+        for (var i = 0; i < _currentAsterboidCount; i++) {
+            LiveAsterboids[i] = true;
             AsterboidReferences[i].Reactivate();
         }
-        Debug.Log("Boid Controller has lost all asterboids and will reactive soon");
     }
 }
 
