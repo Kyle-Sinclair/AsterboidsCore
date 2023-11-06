@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
         transform.position += transform.forward * (Time.deltaTime * 5f);
 
         if (transform.position.z > 50f) {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using Config;
 using GameSystems.Services;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GameSystems {
     public class Bootstrapper : MonoBehaviour {
@@ -27,7 +28,9 @@ namespace GameSystems {
         }
 
         private void Update() {
-
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                Application.Quit();
+            }
 
 
         }
