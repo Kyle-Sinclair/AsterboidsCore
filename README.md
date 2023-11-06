@@ -71,4 +71,4 @@ simply started keeping track of currently 'alive' asteroids as a boolean array, 
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/live%20asterboids%20array.png?raw=true).
 
-![alt text]([https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/live%20asterboids%20check.png?raw=true).
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/live%20asterboids%20check.png?raw=true).
