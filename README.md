@@ -30,7 +30,19 @@ The actual movement of asterboids then occurs as a separate Transform job, using
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/MoveAsterboidJob.png?raw=true).
 
+An additional job then updates the asterboid positions and rotations into the native arrays at the end of the frame.
+These methods together can achieve 60 FPS for about 5000 boids, 1000 each centered one of 5 boid controllers. 
 
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/5000%20blobs%2060%20FPS.png).
+
+However, there are some new bottlenecks emerging at this point. Almost half of the CPU thread's per frame calculation time is now
+spent on jobs idling on dependencies waiting to complete. We may be able to get some improvements by organising these calls to the jobs in a more logical fashion. 
+In addition, the boid direction calculation job is not parallelised at this point. This could also improve the speed of the job. 
+
+Starting with the parallelism allows us to simulate 10000 boids, orbiting 5 controllers at 20 FPS. However, our boid direction calculation is still taking us 
+16 ms each frame. 
+
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20at%2020%20FPS.png).
 
 Downside of this method 
 
