@@ -49,8 +49,14 @@ quickly the jobs need one another, this may not be possible to remove. Nonethele
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20timeline%20view.png).
 
-We can try sorting out the jobs to be scheduled into distinct called phases of the frame, coordinated from a manager class
-
+We can try sorting out the jobs to be scheduled into distinct called phases of the frame, coordinated from a manager class.
+Each phase has a distinct responsibility, with the first storing which asterboid indexes are now "dead", and then the early phase scheduling
+the boid direction calculation job. The last phase then calls the other two jobs that rely on the boid direction job.
 
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Logical%20boids.png).
 
+Sadly, this does not cause any improvements in speed. In all likelihood given the complexity of the boid steering calculation, this job probably cannot be compressed
+any further without exploring methods such as vectorisation. 
+
+Rendering and physics are also becoming bottlenecks, so exploring GPU instanced meshes and ECS' collisiion system would probably also become more 
+realistic methods for moving forward. 
