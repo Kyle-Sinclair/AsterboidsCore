@@ -1,4 +1,16 @@
 # AsterboidsCore
+
+ Intention of this project is to bring a boiding protocol, which are very common in C#, into the Unity DOTS system. 
+
+The basic boids core implementation was taken from here: https://github.com/keijiro/Boids/tree/7eb25a1a5a65a04427bbb4070184c59a4af7b354
+
+This implementation has each boid use the Unity Physics system to locate its neighnours inside its own update loop. 
+
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
+The obvious target for reducing 
+
+
  
 Wanted to make something that actually leverages the job system to do something other than just have many entities doing a basic task
 
