@@ -47,6 +47,9 @@ Starting with the parallelism allows us to simulate 10000 boids, orbiting 5 cont
 Looking at this from the timeline view it becomes apparent that waiting on job dependencies is costing us almost 10 ms per frame. However, given how
 quickly the jobs need one another, this may not be possible to remove. Nonetheless, let us try to coordinate job scheduling more logically. 
 
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/10000%20boids%20timeline%20view.png).
+
+
 Downside of this method 
 
 - IJobParallelTransformFor interacts with the transform heirarchy's automessaging, meaning that the unity object
