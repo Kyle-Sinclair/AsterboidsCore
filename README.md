@@ -12,7 +12,7 @@ Running 50 boids using this generic implementation of the boiding algorithm runs
 
 Firstly, the physics system uses non allocating sphere checks. This reduces the size of memory needing to be allocated at 
 instantiation time for each individual boid but it also means the physics system is creating and destroying huge amounts of 
-collider arrays every frame. 
+collider arrays every frame, giving us the large orange section taking up roughly 30% of our main thread per frame. 
 Secondly, since all the objects have their own individual update calls, Unity's update invoke behaviour is producing 
 obvious issues ala [10000 update calls](https://blog.unity.com/engine-platform/10000-update-calls)
 
