@@ -21,9 +21,14 @@ obvious issues ala [10000 update calls](https://blog.unity.com/engine-platform/1
 ![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/Profiler-PhysicsAllocUpdateCost.png).
 
 Since ultimately all that needs to be found in the physics sphere check is the position of nearby boids, this area is obviously ripe for
-incorporation into a burst job. 
+incorporation into a burst job. By storing every asteroids position, rotation and velocity into a contiguous arrays, we can guarentee cache coherency
+for every neighbour calculation. 
 
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/BoidDirectionJob%20-%20pre%20parallel.png?raw=true).
 
+The actual movement of asterboids then occurs as a separate Transform job, using the transform access arrays. 
+
+![alt text](https://github.com/Kyle-Sinclair/AsterboidsCore/blob/main/Assets/Screenshots/MoveAsterboidJob.png?raw=true).
 
 
 
